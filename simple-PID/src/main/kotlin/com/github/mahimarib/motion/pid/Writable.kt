@@ -1,5 +1,5 @@
 package com.github.mahimarib.motion.pid
 
-interface PIDOutput {
+interface Writable {
     fun write(output: Double)
 }

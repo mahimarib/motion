@@ -1,6 +1,6 @@
 package com.github.mahimarib.motion.pid
 
-interface PIDSource {
+interface ReadableSource {
     var type: SourceType
     fun get(): Double
 }
