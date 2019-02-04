@@ -1,35 +1,16 @@
-plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.11' apply false
-}
-
 allprojects {
     apply plugin: 'idea'
 }
 
 subprojects { project ->
-    apply plugin: 'kotlin'
+    apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
     
     group 'com.github.mahimarib'
     version '0.01'
 
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    }
-
     sourceCompatibility = java_version
-    
-    compileKotlin {
-        kotlinOptions.jvmTarget = java_version
-    }
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = java_version
-    }
 }
 
 wrapper {
