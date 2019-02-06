@@ -1,38 +1,50 @@
 package com.github.mahimarib.pid;
 
 public class PID {
-    private double kP = 0;
-    private double kI = 0;
-    private double kD = 0;
-    private double kF = 0;
+    private double kP;
+    private double kI;
+    private double kD;
+    private double kF;
 
     private double maxOutput = 0;
     private double minOutput = 0;
 
     private double setpoint = 0;
 
-    private Source source;
-    private Output output;
+    private double errorSum = 0;
+    private double prevError = 0;
+    private double output = 0;
+    private double clampedOutput = 0;
 
-    public PID(double kP, double kI, double kD, double kF,
-               Source source, Output output) {
+    private Source source;
+    private Output outputObj;
+
+    public PID(
+            double kP, double kI, double kD, double kF,
+            Source source, Output outputObj) {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
         this.kF = kF;
         this.source = source;
-        this.output = output;
+        this.outputObj = outputObj;
     }
 
-    public PID(double kP, double kI, double kD, Source source,
-               Output output) {
-        this(kP, kI, kD, 0.0, source, output);
+    public PID(
+            double kP, double kI, double kD, Source source,
+            Output outputObj) {
+        this(kP, kI, kD, 0.0, source, outputObj);
+    }
+
+    public static double clamp(double value, double min, double max) {
+        return Math.max(min, Math.min(value, max));
     }
 
     public void setOutputLimit(double min, double max) {
         if (min > max) {
-            throw new IllegalArgumentException("The minimum output is greater" +
-                    " the the maximum output");
+            throw new IllegalArgumentException(
+                    "The minimum outputObj is greater" +
+                    " the the maximum outputObj");
         }
         this.maxOutput = max;
         this.minOutput = min;
@@ -51,20 +63,30 @@ public class PID {
     }
 
     public void calculate() {
-        double kP_Output;
-        double kI_Output;
-        double kD_Output;
-        double kF_Output;
+        double error = getError();
 
-        double PID_output;
+        double kF_Output = kF * setpoint;
+        double kP_Output = kP * error;
+        double kI_Output = kI * errorSum;
+        double kD_Output = kD * (error - prevError);
 
-        kF_Output = kF * setpoint;
+        boolean isSaturated = output > clampedOutput;
+        int signOfOutput = output > 0 ? 1 : -1;
+        int signOfError = error > 0 ? 1 : -1;
 
-        kP_Output = kP * getError();
+        if (isSaturated && signOfError == signOfOutput) {
+            kI_Output = 0;
+        }
 
+        output = kP_Output + kI_Output + kD_Output + kF_Output;
+        clampedOutput = clamp(output, minOutput, maxOutput);
+
+        errorSum += error;
+        prevError = error;
     }
 
-    public static double clamp(double value, double min, double max) {
-        return Math.max(min, Math.min(value, max));
+    public void run() {
+        calculate();
+        outputObj.write(clampedOutput);
     }
 }
