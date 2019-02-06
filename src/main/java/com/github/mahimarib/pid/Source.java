@@ -6,20 +6,19 @@ package com.github.mahimarib.pid;
  */
 interface Source {
     /**
-     * This method sets the source type to either displacement, or rate
-     * {@link SourceType}.
-     *
-     * @param sourceType source type of sensor.
-     */
-    void setSourceType(SourceType sourceType);
-
-    /**
      * Getter for the sensor source type {@link SourceType}.
      *
      * @return source type of sensor.
      */
     SourceType getSourceType();
 
+    /**
+     * This method sets the source type to either displacement, or rate
+     * {@link SourceType}.
+     *
+     * @param sourceType source type of sensor.
+     */
+    void setSourceType(SourceType sourceType);
 
     /**
      * This method is used to get the sensor value to feed into the PID
