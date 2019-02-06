@@ -54,11 +54,15 @@ public class PID {
         setOutputLimit(-outputLimit, outputLimit);
     }
 
+    public double getSetpoint() {
+        return setpoint;
+    }
+
     public void setSetpoint(double setpoint) {
         this.setpoint = setpoint;
     }
 
-    private double getError() {
+    protected double getError() {
         return setpoint - source.get();
     }
 
