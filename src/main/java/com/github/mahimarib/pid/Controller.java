@@ -1,7 +1,7 @@
 package com.github.mahimarib.pid;
 
 public class Controller extends PID {
-    private Tolerance tolerance = null;
+    private Tolerance tolerance;
     private boolean enabled = false;
 
     public Controller(
@@ -58,6 +58,14 @@ public class Controller extends PID {
         if (enabled) {
             super.run();
         }
+    }
+
+    public void setAbsoluteTolerance(double value) {
+        tolerance = new AbsoluteTolerance(value);
+    }
+
+    public void setPercentTolerance(double percent) {
+        tolerance = new PercentTolerance(percent);
     }
 
     public boolean onTarget() {
