@@ -93,4 +93,12 @@ public class PID {
         calculate();
         outputObj.write(clampedOutput);
     }
+
+    public void reset() {
+        setpoint = 0;
+        output = 0;
+        clampedOutput = 0;
+        prevError = 0;
+        errorSum = 0;
+    }
 }
