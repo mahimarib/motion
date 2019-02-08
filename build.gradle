@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.github.mahimarib'
-version '0.0.1'
+version '0.0.2'
 
 sourceCompatibility = java_version
 
@@ -20,4 +20,8 @@ task sourcesJar(type: Jar) {
 
 wrapper {
     gradleVersion gradle_version
+}
+
+artifacts {
+    archives sourcesJar
 }
