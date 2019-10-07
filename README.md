@@ -115,7 +115,7 @@ public class RunMotor {
     // running the PID until it reaches setpoint then stop, it can hold the
     // position if you don't. The run() method must be called inside a loop.
     public void loop() {
-        while (!motorController.onTarget()) {
+        if (!motorController.onTarget()) {
             motorController.run();
         }
         motorController.disable();
